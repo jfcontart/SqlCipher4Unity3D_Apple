@@ -62,10 +62,17 @@ All is automatic!
 
 See https://www.zetetic.net/sqlcipher/sqlcipher-api/ for PRAGMA configurations.
 
-Copy in "Plugins" folder in Unity3D, select each file and check in "Inspector" :
+Copy in "**Plugins**" (create one if necessary) folder in Unity3D, select each file and check in "Inspector" :
 
+### iOS
+
+For the file **/Plugins/iOS/libsqlcipher.a **
 ![IOS](./IOS_Inspector.png)
+
+For the file **/Plugins/macOS/sqlcipher.bundle **
 ![OSX](./OSX_Inspector.png)
+
+For the file **/Plugins/tvOS/libsqlcipher.a **
 ![TVOS](./TVOS_Inspector.png)
 
 ## LICENCES
