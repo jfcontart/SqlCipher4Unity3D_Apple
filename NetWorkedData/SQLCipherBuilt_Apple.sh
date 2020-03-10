@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 #---------------------------------------------------------------------------------------------
 # Version example : 3310100
 #---------------------------------------------------------------------------------------------
@@ -14,20 +13,8 @@ fi
 VERSION=$1
 
 #---------------------------------------------------------------------------------------------
-# Config your build 
+# Config
 #---------------------------------------------------------------------------------------------
-
-# config ./configure
-
-COMPILE_OPTION="\
---with-pic \
---disable-tcl \
---enable-tempstore=no \
---enable-threadsafe=yes \
---with-crypto-lib=commoncrypto \
-"
-
-# config ./configure CFLAGS="${CFLAGS} ${SQLITE_CFLAGS}" \
 
 SQLITE_CFLAGS=" \
 -DSQLITE_HAS_CODEC \
@@ -35,24 +22,36 @@ SQLITE_CFLAGS=" \
 -DSQLITE_TEMP_STORE=2 \
 "
 
+LDFLAGS="\
+-framework Security \
+-framework Foundation \
+"
+
+COMPILE_OPTION=" \
+--with-pic \
+--disable-tcl \
+--enable-tempstore=yes \
+--enable-threadsafe=yes \
+--with-crypto-lib=commoncrypto \
+"
+
+#---------------------------------------------------------------------------------------------
+# Download sources
 #---------------------------------------------------------------------------------------------
 #prepare dir to compile
-#---------------------------------------------------------------------------------------------
 
 mkdir ./tmp
 mkdir ./tmp/${VERSION}
 cd ./tmp/${VERSION}/
 
-#---------------------------------------------------------------------------------------------
 #Download sources files from SQLite
-#---------------------------------------------------------------------------------------------
 
 curl -OL https://github.com/sqlcipher/sqlcipher/archive/v${VERSION}.tar.gz
 tar -xvf v${VERSION}.tar.gz
 cd sqlcipher-${VERSION}
 
 #---------------------------------------------------------------------------------------------
-# compile for Apple© 
+# for Apple©
 #---------------------------------------------------------------------------------------------
 
 DEVELOPER=$(xcode-select -print-path)
@@ -65,13 +64,8 @@ export LIBTOOL="${TOOLCHAIN_BIN}/libtool"
 export NM="${TOOLCHAIN_BIN}/nm"
 export LD="${TOOLCHAIN_BIN}/ld"
 
-LDFLAGS="\
--framework Security \
--framework Foundation \
-"
-
 #---------------------------------------------------------------------------------------------
-# compile for iOS (iPhone / iPad)
+# iOS (iPhone / iPad)
 #---------------------------------------------------------------------------------------------
 #Compile for ARMV7
 
@@ -84,15 +78,16 @@ export CROSS_TOP="${DEVELOPER}/Platforms/${OS_COMPILER}.platform/Developer"
 export CROSS_SDK="${OS_COMPILER}.sdk"
 
 CFLAGS="\
-  -fembed-bitcode \
-  -arch ${ARCH} \
-  -isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} \
-  -mios-version-min=${IOS_MIN_SDK_VERSION} \
+-fembed-bitcode \
+-arch ${ARCH} \
+-isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} \
+-mios-version-min=${IOS_MIN_SDK_VERSION} \
 "
 
 make clean
 
 ./configure ${COMPILE_OPTION} \
+--host="$HOST" \
 CFLAGS="${CFLAGS} ${SQLITE_CFLAGS}" \
 LDFLAGS="${LDFLAGS}"
 
@@ -103,7 +98,7 @@ make libsqlcipher.la
 mkdir ./${ARCH}
 cp .libs/libsqlcipher.a ${ARCH}/libsqlcipher.a
 
-#--------------------------------------------------------
+#---------------------------------------------------------------------------------------------
 #Compile for ARMV7s
 
 ARCH=armv7s
@@ -115,15 +110,16 @@ export CROSS_TOP="${DEVELOPER}/Platforms/${OS_COMPILER}.platform/Developer"
 export CROSS_SDK="${OS_COMPILER}.sdk"
 
 CFLAGS="\
-  -fembed-bitcode \
-  -arch ${ARCH} \
-  -isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} \
-  -mios-version-min=${IOS_MIN_SDK_VERSION} \
+-fembed-bitcode \
+-arch ${ARCH} \
+-isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} \
+-mios-version-min=${IOS_MIN_SDK_VERSION} \
 "
 
 make clean
 
 ./configure ${COMPILE_OPTION} \
+--host="$HOST" \
 CFLAGS="${CFLAGS} ${SQLITE_CFLAGS}" \
 LDFLAGS="${LDFLAGS}"
 
@@ -134,7 +130,7 @@ make libsqlcipher.la
 mkdir ./${ARCH}
 cp .libs/libsqlcipher.a ${ARCH}/libsqlcipher.a
 
-#--------------------------------------------------------
+#---------------------------------------------------------------------------------------------
 #Compile for ARM64
 
 ARCH=arm64
@@ -146,15 +142,16 @@ export CROSS_TOP="${DEVELOPER}/Platforms/${OS_COMPILER}.platform/Developer"
 export CROSS_SDK="${OS_COMPILER}.sdk"
 
 CFLAGS="\
-  -fembed-bitcode \
-  -arch ${ARCH} \
-  -isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} \
-  -mios-version-min=${IOS_MIN_SDK_VERSION} \
+-fembed-bitcode \
+-arch ${ARCH} \
+-isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} \
+-mios-version-min=${IOS_MIN_SDK_VERSION} \
 "
 
 make clean
 
 ./configure ${COMPILE_OPTION} \
+--host="$HOST" \
 CFLAGS="${CFLAGS} ${SQLITE_CFLAGS}" \
 LDFLAGS="${LDFLAGS}"
 
@@ -165,7 +162,7 @@ make libsqlcipher.la
 mkdir ./${ARCH}
 cp .libs/libsqlcipher.a ${ARCH}/libsqlcipher.a
 
-#--------------------------------------------------------
+#---------------------------------------------------------------------------------------------
 #Compile for x86_64
 
 ARCH=x86_64
@@ -177,15 +174,16 @@ export CROSS_TOP="${DEVELOPER}/Platforms/${OS_COMPILER}.platform/Developer"
 export CROSS_SDK="${OS_COMPILER}.sdk"
 
 CFLAGS="\
-  -fembed-bitcode \
-  -arch ${ARCH} \
-  -isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} \
-  -mios-version-min=${IOS_MIN_SDK_VERSION} \
+-fembed-bitcode \
+-arch ${ARCH} \
+-isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} \
+-mios-version-min=${IOS_MIN_SDK_VERSION} \
 "
 
 make clean
 
 ./configure ${COMPILE_OPTION} \
+--host="$HOST" \
 CFLAGS="${CFLAGS} ${SQLITE_CFLAGS}" \
 LDFLAGS="${LDFLAGS}"
 
@@ -196,7 +194,7 @@ make libsqlcipher.la
 mkdir ./${ARCH}
 cp .libs/libsqlcipher.a ${ARCH}/libsqlcipher.a
 
-#--------------------------------------------------------
+#---------------------------------------------------------------------------------------------
 #LIPO
 
 cd ..
@@ -205,29 +203,22 @@ cd ..
 mkdir ./${VERSION}
 mkdir ./${VERSION}/iOS
 
-#mkdir ./${VERSION}/iOS/armv7
-#rm ./${VERSION}/iOS/armv7/libsqlcipher.a
-#cp ./tmp/${VERSION}/sqlcipher-${VERSION}/armv7/libsqlcipher.a ./${VERSION}/armv7/libsqlcipher.a
-#mkdir ./${VERSION}/iOS/armv7s
-#rm ./${VERSION}/iOS/armv7s/libsqlcipher.a
-#cp ./tmp/${VERSION}/sqlcipher-${VERSION}/armv7s/libsqlcipher.a ./${VERSION}/armv7s/libsqlcipher.a
-#mkdir ./${VERSION}/iOS/arm64
-#rm ./${VERSION}/iOS/arm64/libsqlcipher.a
-#cp ./tmp/${VERSION}/sqlcipher-${VERSION}/arm64/libsqlcipher.a ./${VERSION}/arm64/libsqlcipher.a
-#mkdir ./${VERSION}/iOS/x86_64
-#rm ./${VERSION}/iOS/x86_64/libsqlcipher.a
-#cp ./tmp/${VERSION}/sqlcipher-${VERSION}/x86_64/libsqlcipher.a ./${VERSION}/x86_64/libsqlcipher.a
-
 rm ./${VERSION}/iOS/libsqlcipher.a
 lipo -create -output "./${VERSION}/iOS/libsqlcipher.a" "./tmp/${VERSION}/sqlcipher-${VERSION}/armv7/libsqlcipher.a" "./tmp/${VERSION}/sqlcipher-${VERSION}/armv7s/libsqlcipher.a" "./tmp/${VERSION}/sqlcipher-${VERSION}/arm64/libsqlcipher.a" "./tmp/${VERSION}/sqlcipher-${VERSION}/x86_64/libsqlcipher.a"
 
-#--------------------------------------------------------
-cd ./tmp/${VERSION}/sqlcipher-${VERSION}/
-#---------------------------------------------------------------------------------------------
-# compile for tvOS (AppleTV)
+open ./${VERSION}
+
+File ./${VERSION}/libsqlcipher.a
+
 #---------------------------------------------------------------------------------------------
 
+cd ./tmp/${VERSION}/sqlcipher-${VERSION}/
+
+#---------------------------------------------------------------------------------------------
+# tvOS (Apple TV)
+#---------------------------------------------------------------------------------------------
 #Compile for ARM64
+
 ARCH=arm64
 TVOS_MIN_SDK_VERSION=10.0
 OS_COMPILER="AppleTVOS"
@@ -237,15 +228,16 @@ export CROSS_TOP="${DEVELOPER}/Platforms/${OS_COMPILER}.platform/Developer"
 export CROSS_SDK="${OS_COMPILER}.sdk"
 
 CFLAGS="\
-  -fembed-bitcode \
-  -arch ${ARCH} \
-  -isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} \
-  -mtvos-version-min=${TVOS_MIN_SDK_VERSION} \
+-fembed-bitcode \
+-arch ${ARCH} \
+-isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} \
+-mtvos-version-min=${TVOS_MIN_SDK_VERSION} \
 "
 
 make clean
 
 ./configure ${COMPILE_OPTION} \
+--host="$HOST" \
 CFLAGS="${CFLAGS} ${SQLITE_CFLAGS}" \
 LDFLAGS="${LDFLAGS}"
 
@@ -256,7 +248,7 @@ make libsqlcipher.la
 mkdir ./${ARCH}
 cp .libs/libsqlcipher.a ${ARCH}/libsqlcipher.a
 
-#--------------------------------------------------------
+#---------------------------------------------------------------------------------------------
 #Compile for x86_64
 
 ARCH=x86_64
@@ -268,15 +260,15 @@ export CROSS_TOP="${DEVELOPER}/Platforms/${OS_COMPILER}.platform/Developer"
 export CROSS_SDK="${OS_COMPILER}.sdk"
 
 CFLAGS="\
-  -fembed-bitcode \
-  -arch ${ARCH} \
-  -isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} \
-  -mtvos-version-min=${TVOS_MIN_SDK_VERSION} \
+-arch ${ARCH} \
+-isysroot ${CROSS_TOP}/SDKs/${CROSS_SDK} \
+-mtvos-version-min=${TVOS_MIN_SDK_VERSION} \
 "
 
 make clean
 
 ./configure ${COMPILE_OPTION} \
+--host="$HOST" \
 CFLAGS="${CFLAGS} ${SQLITE_CFLAGS}" \
 LDFLAGS="${LDFLAGS}"
 
@@ -287,7 +279,7 @@ make libsqlcipher.la
 mkdir ./${ARCH}
 cp .libs/libsqlcipher.a ${ARCH}/libsqlcipher.a
 
-#--------------------------------------------------------
+#---------------------------------------------------------------------------------------------
 #LIPO
 
 cd ..
@@ -296,28 +288,36 @@ cd ..
 mkdir ./${VERSION}
 mkdir ./${VERSION}/tvOS
 
-#mkdir ./${VERSION}/tvOS/arm64
-#rm ./${VERSION}/tvOS/arm64/libsqlcipher.a
-#cp ./tmp/${VERSION}/sqlcipher-${VERSION}/arm64/libsqlcipher.a ./${VERSION}/tvOS/arm64/libsqlcipher.a
-#mkdir ./${VERSION}/tvOS/x86_64
-#rm ./${VERSION}/tvOS/x86_64/libsqlcipher.a
-#cp ./tmp/${VERSION}/sqlcipher-${VERSION}/x86_64/libsqlcipher.a ./${VERSION}/tvOS/x86_64/libsqlcipher.a
-
 rm ./${VERSION}/tvOS/libsqlcipher.a
 lipo -create -output "./${VERSION}/tvOS/libsqlcipher.a" "./tmp/${VERSION}/sqlcipher-${VERSION}/arm64/libsqlcipher.a" "./tmp/${VERSION}/sqlcipher-${VERSION}/x86_64/libsqlcipher.a"
 
-#--------------------------------------------------------
+open ./${VERSION}
+
+File ./${VERSION}/tvOS/libsqlcipher.a
+
+#---------------------------------------------------------------------------------------------
+
 cd ./tmp/${VERSION}/sqlcipher-${VERSION}/
+
 #---------------------------------------------------------------------------------------------
-# compile for macOS (OSX)
+# remove export for iOS tvOS
+#---------------------------------------------------------------------------------------------
+unset CC
+unset AR
+unset RANLIB
+unset STRIP
+unset LIBTOOL
+unset NM
+unset LD
+unset CROSS_TOP
+unset CROSS_SDK
+#---------------------------------------------------------------------------------------------
+# macOS (OSX)
 #---------------------------------------------------------------------------------------------
 
-ARCH=x86_64
-
-CFLAGS="\
-  -fembed-bitcode \
-  -arch ${ARCH} \
-  -mmacos-version-min=10.10 \
+CFLAGS=" \
+-arch x86_64 \
+-mmacos-version-min=10.10 \
 "
 
 make clean
@@ -336,22 +336,16 @@ cd ..
 
 mkdir ./${VERSION}
 mkdir ./${VERSION}/macOS
-rm  ./${VERSION}/macOS/libsqlcipher.0.dylib
+rm  ./${VERSION}/macOS/sqlcipher.bundle
 
 cp ./tmp/${VERSION}/sqlcipher-${VERSION}/.libs/libsqlcipher.0.dylib ./${VERSION}/macOS/sqlcipher.bundle
 
-#--------------------------------------------------------
-cd ./tmp/${VERSION}/sqlcipher-${VERSION}/
-
-#---------------------------------------------------------------------------------------------
-#Clean 
 #---------------------------------------------------------------------------------------------
 
-cd ..
-cd ..
-cd ..
+
+#---------------------------------------------------------------------------------------------
+# Clean all sources and files
+#---------------------------------------------------------------------------------------------
 
 rm -r ./tmp
-
-open ./${VERSION}
 
