@@ -66,13 +66,20 @@ Copy in "**Plugins**" (create one if necessary) folder in Unity3D, select each f
 
 ### iOS
 
-For the file **/Plugins/iOS/libsqlcipher.a **
+For the file **/Plugins/iOS/libsqlcipher.a**
+
 ![IOS](./IOS_Inspector.png)
 
-For the file **/Plugins/macOS/sqlcipher.bundle **
+### macOS
+
+For the file **/Plugins/macOS/sqlcipher.bundle**
+
 ![OSX](./OSX_Inspector.png)
 
-For the file **/Plugins/tvOS/libsqlcipher.a **
+### tvOS
+
+For the file **/Plugins/tvOS/libsqlcipher.a**
+
 ![TVOS](./TVOS_Inspector.png)
 
 ## LICENCES
