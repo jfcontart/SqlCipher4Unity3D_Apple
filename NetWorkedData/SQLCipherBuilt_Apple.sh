@@ -22,7 +22,7 @@ VERSION=$1
 COMPILE_OPTION="\
 --with-pic \
 --disable-tcl \
---enable-tempstore=yes \
+--enable-tempstore=no \
 --enable-threadsafe=yes \
 --with-crypto-lib=commoncrypto \
 "

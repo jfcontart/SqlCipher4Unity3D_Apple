@@ -1,13 +1,20 @@
 # SqlCipher4Unity3D_Apple
 
-SqlCipher4Unity3D build bundle for macOS© (OSX©), iOS© and tvOS©. 
+## Binairies in repository
+
+We already built default binaries for some versions and pushed in this repository.
+
+## Shell script
+
+SqlCipherBuilt_Apple.sh build bundle for macOS© (OSX©), lib for iOS© and lib for tvOS©. 
 
 Use with https://github.com/netpyoung/SqlCipher4Unity3D .
 
 You need :
-- be on macOS
-- install xcode
-- install xcode tools and active Command Lines Tools (in xcode preferences>Locations)
+- **Apple©** computer with **macOS 10.15**
+- install **Xcode 11.3**
+- install **Xcode tools** 
+- Active **Command Lines Tools** (in **Xcode Preferences>Locations**)
 
 ## Use the SQLCipherBuilt_Apple.sh
 
@@ -24,42 +31,42 @@ All is automatic!
 Open the SQLCipherBuilt_Apple.sh, find the lines and edit your config
 
 ```
-./configure \
---enable-tempstore=no \
---enable-load-extension \
+COMPILE_OPTION="\
+--with-pic \
 --disable-tcl \
-CFLAGS="\
--arch x86_64 \
--mmacos-version-min=10.10 \
-" \
-LDFLAGS="\
--framework Security \
--framework Foundation \
+--enable-tempstore=yes \
+--enable-threadsafe=yes \
+--with-crypto-lib=commoncrypto \
 "
 ```
 
-save and execute:
+See https://www.sqlite.org/compile.html for the flags.
+
+```
+SQLITE_CFLAGS=" \
+-DSQLITE_HAS_CODEC \
+-DSQLITE_THREADSAFE=1 \
+-DSQLITE_TEMP_STORE=2 \
+"
+```
+
+save and execute with the version of release:
 
 ```
 cd <this directory>
-./SQLCipher_Apple.sh <version example:4.3.0>
+./SqlCipherBuilt_Apple.sh <version example:4.3.0>
 ```
 All is automatic!
 
 ## Copy in Unity3D project
 
-Copy in "MacOS" folder in Unity3D, select file and check in "Inspector" :
+See https://www.zetetic.net/sqlcipher/sqlcipher-api/ for PRAGMA configurations.
 
-On select **platforms for plugin**
-- Set "Editor" - yes
-- Set "Standalone" - yes
+Copy in "Plugins" folder in Unity3D, select each file and check in "Inspector" :
 
-On tab **unity**
-- Set "CPU" - Any CPU
-- Set "OS" - OSX
-
-On tab **standalone**
-- Set "X64" - yes
+![IOS](./IOS_Inspector.png)
+![OSX](./OSX_Inspector.png)
+![TVOS](./TVOS_Inspector.png)
 
 ## LICENCES
 
