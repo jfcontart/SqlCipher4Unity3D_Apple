@@ -22,7 +22,7 @@ Use the SQLCipherBuilt_Apple.sh default
 
 ```
 cd <this directory>
-./SQLCipher_Apple.sh <version example:4.3.0>
+./SQLCipherBuilt_Apple.sh <version example:4.3.0>
 ```
 All is automatic!
 
@@ -87,7 +87,7 @@ For the file **/Plugins/tvOS/libsqlcipher.a**
 | project                                                        | license                                                                      |
 |----------------------------------------------------------------|------------------------------------------------------------------------------|
 | this shell script                                        | is copyleft!
-| [SqlCipher4Unity3d](./)                                        | [MIT](https://github.com/robertohuertasm/SQLite4Unity3d/blob/master/LICENSE) |
+| [SqlCipher4Unity3d](https://github.com/robertohuertasm/SQLite4Unity3d)                                        | [MIT](https://github.com/robertohuertasm/SQLite4Unity3d/blob/master/LICENSE) |
 | [SQLite4Unity3d](https://github.com/codecoding/SQLite4Unity3d) | [MIT](https://github.com/codecoding/SQLite4Unity3d/blob/master/LICENSE)      |
 | [Sqlite-net](https://github.com/praeclarum/sqlite-net)         | [MIT](https://github.com/praeclarum/sqlite-net/blob/master/LICENSE.txt)      |
 | [SQLite](sqlite370_banner.gif)                                 | [SQLite's License](https://sqlite.org/copyright.html)                        |
