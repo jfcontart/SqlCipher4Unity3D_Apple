@@ -6,7 +6,7 @@
 if [ "$#" -ne 1 ]
 then
     echo "Usage:"
-    echo "./SQLiteBuilt.sh <VERSION>"
+    echo "./SQLCipherBuilt_Apple.sh <VERSION>"
     exit 1
 fi
 
@@ -46,8 +46,8 @@ cd ./tmp/${VERSION}/
 
 #Download sources files from SQLite
 
-curl -OL https://github.com/sqlcipher/sqlcipher/archive/v${VERSION}.tar.gz
-tar -xvf v${VERSION}.tar.gz
+curl -OL https://github.com/sqlcipher/sqlcipher/archive/v${VERSION}.zip
+tar -xvf v${VERSION}.zip
 cd sqlcipher-${VERSION}
 
 #---------------------------------------------------------------------------------------------
